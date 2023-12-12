@@ -25,7 +25,7 @@ class Tankbuild :
         self.tankxchose  =[200,winWidth/2+200]
         self.tankx       =self.tankxchose[chose-1]
         self.tanky       =200
-        self.tankspeed   =5
+        self.tankspeed   =1
         self.key         =key                               #操作按钮
         self.imageall    =pygame.image.load(image)          #装载图片
         self.tankright   =self.imageall
@@ -53,13 +53,13 @@ class Tankbuild :
         if self.moveleft :
             self.tankx-=self.tankspeed
             self.moveleft =False
-        elif self.moveright :
+        if self.moveright :
             self.tankx+=self.tankspeed
             self.moveright=False
-        elif self.moveup :
+        if self.moveup :
             self.tanky-=self.tankspeed
             self.moveup   =False
-        elif self.movedown :
+        if self.movedown :
             self.tanky+=self.tankspeed
             self.movedown =False
 
@@ -68,12 +68,15 @@ class Tankbuild :
         #上下左右
         if get_press[self.key[0]]:
             self.moveup = True
-        elif get_press[self.key[1]]:
+        if get_press[self.key[1]]:
             self.movedown = True
-        elif get_press[self.key[2]]:
+        if get_press[self.key[2]]:
             self.moveleft = True
-        elif get_press[self.key[3]]:
+        if get_press[self.key[3]]:
             self.moveright = True
+        if get_press[self.key[4]]:
+            self.fire.append(bullet(self.tankx,self.tanky,self.tankstatus,path1)) 
+            
         # if self.chose==1 :
         #     get_press=pygame.key.get_pressed()
         #     if get_press[K_w] :
@@ -109,7 +112,7 @@ class bullet :
         
         self.bulx     =bulx
         self.buly     =buly
-        self.speed    =8
+        self.speed    =20
         self.direction=direction
 
         self.image=pygame.image.load(path)
@@ -327,9 +330,9 @@ if __name__=='__main__' :
 
         #参数初始化
         #攻击高
-        Tank =Tankbuild(1,[K_w,K_s,K_a,K_d],"pictures/tank1.png",power=15)
+        Tank =Tankbuild(1,[K_w,K_s,K_a,K_d,K_r],"pictures/tank1.png",power=15)
         #血厚
-        Tank2=Tankbuild(2,[K_UP,K_DOWN,K_LEFT,K_RIGHT],"pictures/tank2.png",blood=150)
+        Tank2=Tankbuild(2,[K_UP,K_DOWN,K_LEFT,K_RIGHT,K_o],"pictures/tank2.png",blood=150)
         Buff_Time=USEREVENT
         pygame.time.set_timer(Buff_Time,15*1000)
         time_left=0
@@ -347,11 +350,11 @@ if __name__=='__main__' :
             for event in pygame.event.get() :
                 if   event.type==QUIT :
                     terminate()
-                elif event.type==KEYDOWN :
-                    if event.key==K_r :
-                        Tank.fire.append(bullet(Tank.tankx,Tank.tanky,Tank.tankstatus,path1))  
-                    if event.key==K_o :
-                        Tank2.fire.append(bullet(Tank2.tankx,Tank2.tanky,Tank2.tankstatus,path2))         
+                # elif event.type==KEYDOWN :
+                #     if event.key==K_r :
+                #         Tank.fire.append(bullet(Tank.tankx,Tank.tanky,Tank.tankstatus,path1))
+                #     if event.key==K_o :
+                #         Tank2.fire.append(bullet(Tank2.tankx,Tank2.tanky,Tank2.tankstatus,path2))
                 elif event.type==Buff_Time :
                     CreateBuff()
                     buffx=random.randint(200,800)
